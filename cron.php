@@ -19,7 +19,8 @@ mysql_set_charset('utf8', $link);
 mysql_select_db('PW_Comission_Items') or die('3Не удалось выбрать базу данных');
 
 $date = date('i');
-if ($date == 10 || $date == 30 || $date == 50) {
+$date2 = date('H');
+if ($date2 > 9 && ($date == 10 || $date == 30 || $date == 50)) {
     $startDate = time();
     $startDate = date('Y-m-d', strtotime('-1 week', $startDate));
 
