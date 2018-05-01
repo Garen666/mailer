@@ -20,7 +20,26 @@ mysql_select_db('PW_Comission_Items') or die('3Не удалось выбрат�
 
 $date = date('i');
 $date2 = date('H');
-if ($date2 > 9 && ($date == 10 || $date == 30 || $date == 50)) {
+if ($date2 > 9 && ($date == 00 || $date == 30)) {
+
+    $serverCheckArray = array();
+
+    $query = "SELECT * FROM `serverCheck`";
+    $result3 = mysql_query($query) or die('Запрос не удался: ' . mysql_error());
+    while ($line = mysql_fetch_array($result3, MYSQL_ASSOC)) {
+        if ($line["index1"]) {
+            $serverCheckArray[$line["name"]] = true;
+        }
+
+        if ($line["index2"]) {
+            $serverCheckArray[$line["name"] . "_2"] = true;
+        }
+
+        if ($line["index3"]) {
+            $serverCheckArray[$line["name"] . "_3"] = true;
+        }
+    }
+
     $startDate = time();
     $startDate = date('Y-m-d', strtotime('-1 week', $startDate));
 
@@ -29,6 +48,10 @@ if ($date2 > 9 && ($date == 10 || $date == 30 || $date == 50)) {
     $lastUpdateArray = array();
 
     while ($line = mysql_fetch_array($result2, MYSQL_ASSOC)) {
+        if (@!$serverCheckArray[$line["server"]]) {
+            continue;
+        }
+
         $lastUpdateArray[$line["server"]] = $line['date'];
     }
 
